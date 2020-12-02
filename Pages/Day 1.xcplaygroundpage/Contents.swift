@@ -1,3 +1,5 @@
+//: [Previous](@previous)
+
 let goal = 2020
 
 import PlaygroundSupport
@@ -33,3 +35,5 @@ PlaygroundPage.current.setLiveView(
 		print(answer)
 	}
 )
+
+//: [Next](@next)
