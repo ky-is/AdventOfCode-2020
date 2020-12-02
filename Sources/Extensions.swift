@@ -6,6 +6,6 @@ public func ^^ (radix: Int, power: Int) -> Int {
 	return Int(pow(Double(radix), Double(power)))
 }
 
-public extension String {
+public extension StringProtocol {
 	var integerRepresentation: Int? { Int(self) }
 }
