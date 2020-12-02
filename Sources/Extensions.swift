@@ -9,3 +9,12 @@ public func ^^ (radix: Int, power: Int) -> Int {
 public extension StringProtocol {
 	var integerRepresentation: Int? { Int(self) }
 }
+
+public extension Collection {
+	subscript(safe index: Index) -> Element? {
+		guard index >= startIndex, index < endIndex else {
+			return nil
+		}
+		return self[index]
+	}
+}
