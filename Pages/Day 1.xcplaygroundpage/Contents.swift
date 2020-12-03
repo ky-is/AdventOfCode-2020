@@ -27,13 +27,14 @@ func multiplyNumbersAddingTo(goal: Int, numberCount: Int, entries: [Int]) -> Int
 }
 
 PlaygroundPage.current.setLiveView(
-	TextInput(title: "Numbers to sum to 2020", placeholder: "Number") { numberText in
-		guard let number = Int(numberText) else {
-			return print("Please input a valid integer")
+	Input(title: "Numbers to sum to 2020", initialValue: 2) { number in
+		if number < 2 || number > 5 {
+			return print("Number must be between 2 and 5")
 		}
 		let answer = multiplyNumbersAddingTo(goal: goal, numberCount: number, entries: getPuzzleInput().compactMap(\.integerRepresentation))
 		print(answer)
 	}
+		.padding(.vertical)
 )
 
 //: [Next](@next)

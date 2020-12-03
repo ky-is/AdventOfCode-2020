@@ -1,34 +1,59 @@
 import SwiftUI
 
-private var lastInput = ""
-
-public struct TextInput: View {
+public struct Input<Result: Equatable>: View {
 	public let title: String
 	public let placeholder: String
-	public let action: (String) -> Void
+	public let formatter: Formatter?
+	public let action: (Result) -> Void
 
-	public init(title: String, placeholder: String, action: @escaping (String) -> Void) {
+	@State private var input: Result
+	@State private var lastInput: Result?
+
+	public init(title: String, placeholder: String, initialValue: Result, formatter: Formatter, action: @escaping (Result) -> Void) {
 		self.title = title
 		self.placeholder = placeholder
 		self.action = action
+		self._input = State(initialValue: initialValue)
+		self.formatter = formatter
 	}
 
-	@State private var input = ""
+	public init(title: String, placeholder: String = "String", initialValue: Result = "", action: @escaping (Result) -> Void) where Result == String {
+		self.title = title
+		self.placeholder = placeholder
+		self.action = action
+		self._input = State(initialValue: initialValue)
+		if initialValue.isEmpty {
+			self._lastInput = State(initialValue: initialValue)
+		}
+		self.formatter = nil
+	}
+
+	public init(title: String, placeholder: String = "Number", initialValue: Result = 0, action: @escaping (Result) -> Void) where Result == Int {
+		self.title = title
+		self.placeholder = placeholder
+		self.action = action
+		self._input = State(initialValue: initialValue)
+		self.formatter = NumberFormatter()
+	}
 
 	public var body: some View {
 		Label {
-			TextField(placeholder, text: $input, onCommit: {
-				let text = input.trimmingCharacters(in: .whitespacesAndNewlines)
-				guard text != lastInput else {
+			TextField(placeholder, value: $input, formatter: formatter ?? Formatter(), onCommit: {
+				let value: Result
+				if let text = input as? String {
+					value = text.trimmingCharacters(in: .whitespacesAndNewlines) as! Result
+				} else {
+					value = input
+				}
+				guard value != lastInput else {
 					return
 				}
-				lastInput = text
-				action(text)
+				action(value)
+				lastInput = value
 			})
 		} icon: {
 			Text("\(title):")
 		}
 			.frame(minWidth: 320)
-			.padding(.vertical)
 	}
 }
