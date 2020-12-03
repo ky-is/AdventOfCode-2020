@@ -1,4 +1,4 @@
-import Darwin
+import Foundation
 
 precedencegroup PowerPrecedence { higherThan: MultiplicationPrecedence }
 infix operator ^^ : PowerPrecedence
@@ -16,5 +16,23 @@ public extension Collection {
 			return nil
 		}
 		return self[index]
+	}
+}
+
+public extension URLSession {
+	func synchronousDataTask(with request: URLRequest) -> (Data?, URLResponse?, Error?) {
+		var data: Data?
+		var response: URLResponse?
+		var error: Error?
+		let semaphore = DispatchSemaphore(value: 0)
+		let task = dataTask(with: request) {
+			data = $0
+			response = $1
+			error = $2
+			semaphore.signal()
+		}
+		task.resume()
+		_ = semaphore.wait(timeout: .distantFuture)
+		return (data, response, error)
 	}
 }
