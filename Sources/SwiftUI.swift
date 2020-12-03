@@ -28,7 +28,7 @@ public struct Input<Result: Equatable>: View {
 		self.formatter = nil
 	}
 
-	public init(title: String, placeholder: String = "Number", initialValue: Result = 0, action: @escaping (Result) -> Void) where Result == Int {
+	public init(title: String, placeholder: String = "Number", initialValue: Result, action: @escaping (Result) -> Void) where Result == Int {
 		self.title = title
 		self.placeholder = placeholder
 		self.action = action

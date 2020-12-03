@@ -1,5 +1,21 @@
 import Foundation
 
+public struct Point {
+	public static let zero = Self(x: 0, y: 0)
+
+	public var x: Int, y: Int
+
+	public init (x: Int, y: Int) {
+		self.x = x
+		self.y = y
+	}
+
+	public mutating func translate(by translation: Self) {
+		x += translation.x
+		y += translation.y
+	}
+}
+
 precedencegroup PowerPrecedence { higherThan: MultiplicationPrecedence }
 infix operator ^^ : PowerPrecedence
 public func ^^ (radix: Int, power: Int) -> Int {
