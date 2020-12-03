@@ -6,30 +6,52 @@ import SwiftUI
 let inputMap = Array(getPuzzleInput().joined(separator: "\n"))
 let mapWidth = inputMap.firstIndex(of: "\n")!
 
-struct Slope: View {
-	@State private var slope = Point(x: 3, y: 1)
-	@State private var mapDisplay = inputMap.map { String($0) }
-	@State private var currentPosition: Point = .zero
-	@State private var treeCollisions = 0
-	@State private var animated = false
+final class SlopeViewModel: ObservableObject {
+	@Published var slope: Point
+	@Published var mapDisplay: [String] = []
+	@Published var treeCollisions = 0
+	@Published var currentPosition: Point = .zero
+	@Published var animated = false
 
 	private let openSquare: Character = "."
 	private let treeSquare: Character = "#"
 	private let markedOpenSquare = "O"
 	private let markedTreeSquare = "X"
 
-	private func markAndMoveAnimated() {
-		if animated {
-			DispatchQueue.main.async(execute: _markAndMove)
-		} else {
-			_markAndMove()
-		}
+	init(slope: Point) {
+		self.slope = slope
+		reset()
 	}
 
-	private func _markAndMove() {
-		let index = (currentPosition.x % (mapWidth)) + currentPosition.y * (mapWidth + 1)
+	private func reset() {
+		mapDisplay = inputMap.map { String($0) }
+		treeCollisions = 0
+		currentPosition = .zero
+	}
+
+	func display() {
+		reset()
+		markAndMoveDisplayLoop()
+	}
+
+	private func markAndMoveDisplayLoop() {
+		if animated {
+			DispatchQueue.main.async(execute: _markAndMoveDisplayLoop)
+		} else {
+			_markAndMoveDisplayLoop()
+		}
+	}
+	private func _markAndMoveDisplayLoop() {
+		if let trees = markAndMoveStep() {
+			return print("Hit", trees, "trees")
+		}
+		markAndMoveDisplayLoop()
+	}
+
+	private func markAndMoveStep() -> Int? {
+		let index = (currentPosition.x % mapWidth) + currentPosition.y * (mapWidth + 1)
 		guard let visitingSquare = inputMap[safe: index] else {
-			return print("Hit", treeCollisions, "trees")
+			return treeCollisions
 		}
 		switch visitingSquare {
 		case openSquare:
@@ -41,26 +63,33 @@ struct Slope: View {
 			fatalError("Unknown map square \(visitingSquare)")
 		}
 		currentPosition.translate(by: slope)
-		markAndMoveAnimated()
+		return nil
 	}
+}
+
+struct Slope: View {
+	@StateObject private var viewModel = SlopeViewModel(slope: Point(x: 3, y: 1))
 
 	var body: some View {
 		VStack {
-			Input<Int>(title: "Slope X", initialValue: slope.x) { number in
-				slope.x = number
+			Input(title: "Slope X", initialValue: viewModel.slope.x) { number in
+				viewModel.slope.x = number
 			}
-			Input<Int>(title: "Slope Y", initialValue: slope.y) { number in
-				slope.y = number
+			Input(title: "Slope Y", initialValue: viewModel.slope.y) { number in
+				viewModel.slope.y = number
 			}
 			HStack {
-				Toggle("Animated", isOn: $animated)
+				Toggle("Animated", isOn: $viewModel.animated)
 				Button("Go") {
-					markAndMoveAnimated()
+					viewModel.display()
 				}
-					.disabled(slope.x <= 0 || slope.y <= 0)
+					.disabled(viewModel.slope.x <= 0 || viewModel.slope.y <= 0)
+				if viewModel.treeCollisions > 0 {
+					Text("\(viewModel.treeCollisions) trees")
+				}
 			}
 		}
-		Text(mapDisplay.joined(separator: ""))
+		Text(viewModel.mapDisplay.joined(separator: ""))
 			.font(.system(.body, design: .monospaced))
 	}
 }
