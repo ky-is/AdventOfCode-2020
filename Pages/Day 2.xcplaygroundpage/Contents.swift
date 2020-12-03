@@ -35,7 +35,6 @@ print("Part 1:", validPasswordsPart1.count, "of", policiesAndPasswords.count, "v
 let validPasswordsPart2 = policiesAndPasswords.filter { (policy, password) in
 	let passwordCharacters = Array(password)
 	let countOfMatchingCharactersAtBoundsIndicies = policy.arrayOfBoundsIndicies.filter { passwordCharacters[safe: $0] == policy.letter }
-	print(password, policy.arrayOfBoundsIndicies, policy.letter)
 	return countOfMatchingCharactersAtBoundsIndicies.count == 1
 }
 print("Part 2:", validPasswordsPart2.count, "of", policiesAndPasswords.count, "valid")
