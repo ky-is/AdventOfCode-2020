@@ -1,7 +1,5 @@
 //: [Previous](@previous)
 
-let goal = 2020
-
 import PlaygroundSupport
 
 func multiplyNumbersAddingTo(goal: Int, numberCount: Int, entries: [Int]) -> Int {
@@ -25,6 +23,10 @@ func multiplyNumbersAddingTo(goal: Int, numberCount: Int, entries: [Int]) -> Int
 	}
 	fatalError("No \(numberCount) numbers add to \(goal) in \(entryCount) entries.")
 }
+
+//MARK: Live
+
+let goal = 2020
 
 PlaygroundPage.current.setLiveView(
 	Input(title: "Numbers to sum to 2020", initialValue: 2) { number in

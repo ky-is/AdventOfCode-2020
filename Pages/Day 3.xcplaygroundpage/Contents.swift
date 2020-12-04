@@ -101,8 +101,17 @@ struct Slope: View {
 	}
 }
 
+//MARK: Live
+
+PlaygroundPage.current.setLiveView(
+	Slope()
+		.padding(.vertical)
+)
+
+//MARK: Run
+
 let part1 = SlopeViewModel(slope: Point(x: 3, y: 1)).calculate()
-print("Part 1", part1)
+print("Part 1:", part1)
 
 let part2 = [
 	Point(x: 1, y: 1),
@@ -113,11 +122,6 @@ let part2 = [
 ]
 	.map { SlopeViewModel(slope: $0).calculate() }
 	.reduce(1, *)
-print("Part 2", part2)
-
-PlaygroundPage.current.setLiveView(
-	Slope()
-		.padding(.vertical)
-)
+print("Part 2:", part2)
 
 //: [Next](@next)

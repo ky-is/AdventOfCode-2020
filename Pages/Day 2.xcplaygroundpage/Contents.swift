@@ -17,8 +17,10 @@ struct PasswordPolicy {
 	}
 }
 
-let policiesAndPasswords = getPuzzleInput().map { passwordLine -> (PasswordPolicy, String) in
-	let policyAndPassword = passwordLine.components(separatedBy: ": ")
+//MARK: Run
+
+let policiesAndPasswords: [(PasswordPolicy, String)] = getPuzzleInput().map {
+	let policyAndPassword = $0.components(separatedBy: ": ")
 	let policy = PasswordPolicy(fromString: policyAndPassword.first!)
 	let password = policyAndPassword.last!
 	return (policy, password)
