@@ -3,7 +3,7 @@
 import PlaygroundSupport
 import SwiftUI
 
-let inputMap = Array(getPuzzleInput().joined(separator: "\n"))
+let inputMap = Array(getRawPuzzleInput())
 let mapWidth = inputMap.firstIndex(of: "\n")!
 
 final class SlopeViewModel: ObservableObject {
