@@ -3,8 +3,22 @@
 import PlaygroundSupport
 import SwiftUI
 
-func getSeatID(row: Int, col: Int) -> Int {
-	return row * 8 + col
+struct BinarySeat {
+	let row, col: Int
+
+	var id: Int {
+		row * 8 + col
+	}
+
+	init(row: Int, col: Int) {
+		self.row = row
+		self.col = col
+	}
+
+	init(binaryString: String) {
+		row = getNumberFromBinary(characters: Array(binaryString.prefix(7)), lower: "B", upper: "F")
+		col = getNumberFromBinary(characters: Array(binaryString.suffix(3)), lower: "R", upper: "L")
+	}
 }
 
 func getNumberFromBinary(characters: [Character], lower: Character, upper: Character) -> Int {
@@ -24,37 +38,36 @@ func getNumberFromBinary(characters: [Character], lower: Character, upper: Chara
 	return min
 }
 
-let input = getPuzzleInput()
+let input = getPuzzleInput().map { BinarySeat(binaryString: $0) }
 
-let part1 = input.reduce(0) { previousMax, binaryData in
-	let row = getNumberFromBinary(characters: Array(binaryData.prefix(7)), lower: "B", upper: "F")
-	let col = getNumberFromBinary(characters: Array(binaryData.suffix(3)), lower: "R", upper: "L")
-	return max(previousMax, getSeatID(row: row, col: col))
+let part1 = input.reduce(0) { previousMax, seat in
+	return max(previousMax, seat.id)
 }
 print("Part 1:", part1)
 
 var occupiedSeats: [[Bool]] = Array(repeating: Array(repeating: false, count: 8), count: 128)
-input.forEach { binaryData in
-	let row = getNumberFromBinary(characters: Array(binaryData.prefix(7)), lower: "B", upper: "F")
-	let col = getNumberFromBinary(characters: Array(binaryData.suffix(3)), lower: "R", upper: "L")
-	occupiedSeats[row][col] = true
+input.forEach { seat in
+	occupiedSeats[seat.row][seat.col] = true
 }
 
 var foundFullRow = false
-var part2 = 0
+var part2: BinarySeat?
 for (row, rowOccupants) in occupiedSeats.enumerated() {
 	let emptySeatCol = rowOccupants.firstIndex(of: false)
 	if foundFullRow {
 		if let col = emptySeatCol {
-			print(row, col)
-			part2 = getSeatID(row: row, col: col)
+			part2 = BinarySeat(row: row, col: col)
 			break
 		}
 	} else if emptySeatCol == nil {
 		foundFullRow = true
 	}
 }
-print("Part 2:", part2)
+if let part2 = part2 {
+	print("Part 2:", part2.id, part2)
+} else {
+	print("No empty seat found")
+}
 
 let seatDiagram = occupiedSeats.map { row in
 	row.map { $0 ? "X" : "O" }.joined(separator: "")
