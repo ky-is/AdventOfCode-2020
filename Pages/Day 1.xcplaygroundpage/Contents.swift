@@ -29,7 +29,7 @@ func multiplyNumbersAddingTo(goal: Int, numberCount: Int, entries: [Int]) -> Int
 let goal = 2020
 
 PlaygroundPage.current.setLiveView(
-	Input(title: "Numbers to sum to 2020", initialValue: 2) { number in
+	Input(title: "Numbers to sum to \(goal)", initialValue: 2) { number in
 		if number < 2 || number > 5 {
 			return print("Number must be between 2 and 5")
 		}

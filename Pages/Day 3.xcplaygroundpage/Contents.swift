@@ -110,18 +110,21 @@ PlaygroundPage.current.setLiveView(
 
 //MARK: Run
 
-let part1 = SlopeViewModel(slope: Point(x: 3, y: 1)).calculate()
-print("Part 1:", part1)
+do {
+	let slope = SlopeViewModel(slope: Point(x: 3, y: 1))
+	print("Part 1:", slope.calculate())
+}
 
-let part2 = [
-	Point(x: 1, y: 1),
-	Point(x: 3, y: 1),
-	Point(x: 5, y: 1),
-	Point(x: 7, y: 1),
-	Point(x: 1, y: 2),
-]
-	.map { SlopeViewModel(slope: $0).calculate() }
-	.reduce(1, *)
-print("Part 2:", part2)
+do {
+	let combinedSlopes = [
+		Point(x: 1, y: 1),
+		Point(x: 3, y: 1),
+		Point(x: 5, y: 1),
+		Point(x: 7, y: 1),
+		Point(x: 1, y: 2),
+	]
+		.map { SlopeViewModel(slope: $0).calculate() }
+	print("Part 2:", combinedSlopes.reduce(1, *))
+}
 
 //: [Next](@next)

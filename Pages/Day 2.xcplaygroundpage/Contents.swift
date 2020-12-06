@@ -26,19 +26,23 @@ let policiesAndPasswords: [(PasswordPolicy, String)] = getPuzzleInput().map {
 	return (policy, password)
 }
 
-let validPasswordsPart1 = policiesAndPasswords.filter { (policy, password) in
-	let countOfValidationCharacter = Array(password)
-		.filter { $0 == policy.letter }
-		.count
-	return policy.countRange.contains(countOfValidationCharacter)
+do {
+	let validPasswords = policiesAndPasswords.filter { (policy, password) in
+		let countOfValidationCharacter = Array(password)
+			.filter { $0 == policy.letter }
+			.count
+		return policy.countRange.contains(countOfValidationCharacter)
+	}
+	print("Part 1:", validPasswords.count, "of", policiesAndPasswords.count, "valid")
 }
-print("Part 1:", validPasswordsPart1.count, "of", policiesAndPasswords.count, "valid")
 
-let validPasswordsPart2 = policiesAndPasswords.filter { (policy, password) in
-	let passwordCharacters = Array(password)
-	let countOfMatchingCharactersAtBoundsIndicies = policy.arrayOfBoundsIndicies.filter { passwordCharacters[safe: $0] == policy.letter }
-	return countOfMatchingCharactersAtBoundsIndicies.count == 1
+do {
+	let validPasswords = policiesAndPasswords.filter { (policy, password) in
+		let passwordCharacters = Array(password)
+		let countOfMatchingCharactersAtBoundsIndicies = policy.arrayOfBoundsIndicies.filter { passwordCharacters[safe: $0] == policy.letter }
+		return countOfMatchingCharactersAtBoundsIndicies.count == 1
+	}
+	print("Part 2:", validPasswords.count, "of", policiesAndPasswords.count, "valid")
 }
-print("Part 2:", validPasswordsPart2.count, "of", policiesAndPasswords.count, "valid")
 
 //: [Next](@next)

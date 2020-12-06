@@ -38,35 +38,40 @@ func getNumberFromBinary(characters: [Character], lower: Character, upper: Chara
 	return min
 }
 
+//MARK: Run
+
 let input = getPuzzleInput().map { BinarySeat(binaryString: $0) }
 
-let part1 = input.reduce(0) { previousMax, seat in
-	return max(previousMax, seat.id)
+do {
+	let highestSeatID = input.reduce(0) { previousMax, seat in
+		return max(previousMax, seat.id)
+	}
+	print("Part 1:", highestSeatID)
 }
-print("Part 1:", part1)
 
 var occupiedSeats: [[Bool]] = Array(repeating: Array(repeating: false, count: 8), count: 128)
 input.forEach { seat in
 	occupiedSeats[seat.row][seat.col] = true
 }
 
-var foundFullRow = false
-var part2: BinarySeat?
-for (row, rowOccupants) in occupiedSeats.enumerated() {
-	let emptySeatCol = rowOccupants.firstIndex(of: false)
-	if foundFullRow {
-		if let col = emptySeatCol {
-			part2 = BinarySeat(row: row, col: col)
-			break
+do {
+	var foundFullRow = false
+	var openSeat: BinarySeat?
+	for (row, rowOccupants) in occupiedSeats.enumerated() {
+		let emptySeatCol = rowOccupants.firstIndex(of: false)
+		if foundFullRow {
+			if let col = emptySeatCol {
+				openSeat = BinarySeat(row: row, col: col)
+				break
+			}
+		} else if emptySeatCol == nil {
+			foundFullRow = true
 		}
-	} else if emptySeatCol == nil {
-		foundFullRow = true
 	}
-}
-if let part2 = part2 {
-	print("Part 2:", part2.id, part2)
-} else {
-	print("No empty seat found")
+	guard let seat = openSeat else {
+		fatalError("No empty seat found")
+	}
+	print("Part 2:", seat.id, seat)
 }
 
 let seatDiagram = occupiedSeats.map { row in

@@ -96,14 +96,18 @@ let passportFieldsEntries: [[PassportField]] = getPuzzleInput(separatedBy: "\n\n
 			}
 	}
 
-let validPassportsPart1 = passportFieldsEntries
-	.filter(hasAllRequiredFields)
-	.count
-print("Part 1:", validPassportsPart1, "valid passports")
+do {
+	let validPassports = passportFieldsEntries
+		.filter(hasAllRequiredFields)
+		.count
+	print("Part 1:", validPassports, "valid passports")
+}
 
-let validPassportsPart2 = passportFieldsEntries
-	.filter(hasAllRequiredValidFields)
-	.count
-print("Part 2:", validPassportsPart2, "valid passports")
+do {
+	let validPassports = passportFieldsEntries
+		.filter(hasAllRequiredValidFields)
+		.count
+	print("Part 2:", validPassports, "valid passports")
+}
 
 //: [Next](@next)
