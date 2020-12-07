@@ -10,12 +10,26 @@ struct BagContained {
 }
 
 func getBagsContaining(name: String) -> [String] {
-	guard let parentsChildren = bagParentsChildrenByName[name] else {
+	guard let parents = bagParentsChildrenByName[name]?.parents else {
 		return []
 	}
-	let parents = parentsChildren.parents
 	return parents + parents.flatMap(getBagsContaining)
 }
+
+func getChildCount(of name: String) -> Int {
+	guard let children = bagParentsChildrenByName[name]?.children else {
+		return 0
+	}
+	let childBagCount = children
+		.map(\.count)
+		.reduce(0, +)
+	let descendentsBagCount = children.reduce(0) { accumulator, child in
+		accumulator + getChildCount(of: child.name) * child.count
+	}
+	return childBagCount + descendentsBagCount
+}
+
+//MARK: Run
 
 getPuzzleInput().forEach { line in
 	let split = line.components(separatedBy: " contain ")
@@ -40,7 +54,12 @@ getPuzzleInput().forEach { line in
 
 do {
 	let bags = Set(getBagsContaining(name: "shiny gold"))
-	print("Part 1:", bags.count, bags)
+	print("Part 1:", bags.count)
+}
+
+do {
+	let bagsCount = getChildCount(of: "shiny gold")
+	print("Part 2:", bagsCount)
 }
 
 //: [Next](@next)
