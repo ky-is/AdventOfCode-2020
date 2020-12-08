@@ -11,16 +11,14 @@ do {
 }
 
 do {
-	let questionsAnsweredByEveryoneInGroupCount: [Int] = individualsAnswersByGroup.map { group in
+	let questionsAnsweredByEveryoneInGroupCounts: [Int] = individualsAnswersByGroup.map { group in
 		var groupRemaining = group
 		let firstPersonAnswers = groupRemaining.removeFirst()
-		var answersForAllInGroup = Array(firstPersonAnswers)
-		groupRemaining.forEach { individualAnswers in
-			answersForAllInGroup.removeAll { !individualAnswers.contains($0) }
-		}
-		return answersForAllInGroup.count
+		return Array(firstPersonAnswers)
+			.filter { answer in groupRemaining.first { !$0.contains(answer) } == nil }
+			.count
 	}
-	print("Part 2:", questionsAnsweredByEveryoneInGroupCount.reduce(0, +))
+	print("Part 2:", questionsAnsweredByEveryoneInGroupCounts.reduce(0, +))
 }
 
 //: [Next](@next)

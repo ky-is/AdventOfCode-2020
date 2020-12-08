@@ -4,6 +4,7 @@ import PlaygroundSupport
 import SwiftUI
 
 let inputMap = Array(getRawPuzzleInput())
+let mapWidth = inputMap.firstIndex(of: "\n")!
 
 final class SlopeViewModel: ObservableObject {
 	@Published var slope: Point
@@ -73,6 +74,8 @@ final class SlopeViewModel: ObservableObject {
 	}
 }
 
+//MARK: Live
+
 struct Slope: View {
 	@StateObject private var viewModel = SlopeViewModel(slope: Point(x: 3, y: 1))
 
@@ -100,16 +103,12 @@ struct Slope: View {
 	}
 }
 
-//MARK: Live
-
 PlaygroundPage.current.setLiveView(
 	Slope()
 		.padding(.vertical)
 )
 
 //MARK: Run
-
-let mapWidth = inputMap.firstIndex(of: "\n")!
 
 do {
 	let slope = SlopeViewModel(slope: Point(x: 3, y: 1))
