@@ -40,7 +40,7 @@ func getNumberFromBinary(characters: [Character], lower: Character, upper: Chara
 
 //MARK: Run
 
-let input = getPuzzleInput().map { BinarySeat(binaryString: $0) }
+let input = loadPuzzleInput().map { BinarySeat(binaryString: $0) }
 
 do {
 	let highestSeatID = input.reduce(0) { previousMax, seat in

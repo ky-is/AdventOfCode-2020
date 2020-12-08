@@ -1,6 +1,6 @@
 //: [Previous](@previous)
 
-let individualsAnswersByGroup = getPuzzleInput(separatedBy: "\n\n").map { $0.split(separator: "\n") }
+let individualsAnswersByGroup = loadPuzzleInput(separatedBy: "\n\n").map { $0.split(separator: "\n") }
 
 do {
 	let questionsAnsweredByAnyoneInGroupCount: [Int] = individualsAnswersByGroup.map { group in

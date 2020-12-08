@@ -31,7 +31,7 @@ func getChildCount(of name: String) -> Int {
 
 //MARK: Run
 
-getPuzzleInput().forEach { line in
+loadPuzzleInput().forEach { line in
 	let split = line.components(separatedBy: " contain ")
 	let parent = split.first!.split(separator: " ").dropLast().joined(separator: " ")
 	let children = split.last!.components(separatedBy: ", ")

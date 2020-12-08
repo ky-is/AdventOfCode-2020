@@ -83,7 +83,7 @@ func hasAllRequiredValidFields(passportFields: [PassportField]) -> Bool {
 
 //MARK: Run
 
-let passportFieldsEntries: [[PassportField]] = getPuzzleInput(separatedBy: "\n\n")
+let passportFieldsEntries: [[PassportField]] = loadPuzzleInput(separatedBy: "\n\n")
 	.map { passportLine in
 		return passportLine
 			.components(separatedBy: .whitespacesAndNewlines)

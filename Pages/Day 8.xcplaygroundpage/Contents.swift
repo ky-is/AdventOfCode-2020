@@ -36,7 +36,7 @@ func accumulate(instructions: [Instruction]) -> (Int, Int) {
 
 //MARK: Run
 
-let instructions = getPuzzleInput().map { Instruction(raw: $0) }
+let instructions = loadPuzzleInput().map { Instruction(raw: $0) }
 
 do {
 	let (_, accumulator) = accumulate(instructions: instructions)

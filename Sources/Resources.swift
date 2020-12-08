@@ -20,6 +20,6 @@ public func getRawPuzzleInput(forFilename filename: String = #filePath) -> Strin
 	return normalize(string: String(data: data!, encoding: .utf8)!)
 }
 
-public func getPuzzleInput(forFilename filename: String = #filePath, separatedBy separator: String = "\n") -> [String] {
+public func loadPuzzleInput(forFilename filename: String = #filePath, separatedBy separator: String = "\n") -> [String] {
 	return getRawPuzzleInput(forFilename: filename).components(separatedBy: separator)
 }
