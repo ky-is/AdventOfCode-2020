@@ -1,35 +1,68 @@
 //: [Previous](@previous)
 
-let input = getPuzzleInput().map { $0.split(separator: " ") }
+struct Instruction {
+	var command: String
+	let number: Int
 
-func accumulate(input: [[String.SubSequence]]) -> Int {
+	init(raw: String) {
+		let split = raw.split(separator: " ")
+		command = String(split.first!)
+		number = Int(split.last!)!
+	}
+}
+
+let instructions = getPuzzleInput().map { Instruction(raw: $0) }
+
+func accumulate(instructions: [Instruction]) -> (Int, Int) {
 	var accumulator = 0
 	var currentIndex = 0
 	var visitedIndices: [Int] = []
-	while currentIndex < input.count && !visitedIndices.contains(currentIndex) {
+	while currentIndex < instructions.count && !visitedIndices.contains(currentIndex) {
 		visitedIndices.append(currentIndex)
-		let line = input[currentIndex]
-		let instruction = line.first!
-		let number = Int(line.last!)!
-		switch instruction {
+		let instruction = instructions[currentIndex]
+		switch instruction.command {
 		case "nop":
 			break
 		case "acc":
-			accumulator += number
+			accumulator += instruction.number
 		case "jmp":
-			currentIndex += number
+			currentIndex += instruction.number
 			continue
 		default:
-			fatalError(String(instruction))
+			fatalError(instruction.command)
 		}
 		currentIndex += 1
 	}
-	return accumulator
+	return (currentIndex, accumulator)
 }
 
 do {
-	let accumulator = accumulate(input: input)
+	let (_, accumulator) = accumulate(instructions: instructions)
 	print("Part 1:", accumulator)
+}
+
+do {
+	var currentIndex = 0
+	var accumulator = 0
+	var modifyInstructionIndex = 0
+	while currentIndex < instructions.count {
+		var tempInstructions = instructions
+		for index in modifyInstructionIndex..<tempInstructions.count {
+			modifyInstructionIndex += 1
+			let command = tempInstructions[index].command
+			if command == "nop" {
+				tempInstructions[index].command = "jmp"
+				break
+			}
+			if command == "jmp" {
+				tempInstructions[index].command = "nop"
+				break
+			}
+		}
+		(currentIndex, accumulator) = accumulate(instructions: tempInstructions)
+
+	}
+	print("Part 2:", accumulator)
 }
 
 //: [Next](@next)
