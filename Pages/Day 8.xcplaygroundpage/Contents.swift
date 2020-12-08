@@ -11,8 +11,6 @@ struct Instruction {
 	}
 }
 
-let instructions = getPuzzleInput().map { Instruction(raw: $0) }
-
 func accumulate(instructions: [Instruction]) -> (Int, Int) {
 	var accumulator = 0
 	var currentIndex = 0
@@ -35,6 +33,10 @@ func accumulate(instructions: [Instruction]) -> (Int, Int) {
 	}
 	return (currentIndex, accumulator)
 }
+
+//MARK: Run
+
+let instructions = getPuzzleInput().map { Instruction(raw: $0) }
 
 do {
 	let (_, accumulator) = accumulate(instructions: instructions)

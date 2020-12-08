@@ -2,8 +2,6 @@
 
 let individualsAnswersByGroup = getPuzzleInput(separatedBy: "\n\n").map { $0.split(separator: "\n") }
 
-//MARK: Run
-
 do {
 	let questionsAnsweredByAnyoneInGroupCount: [Int] = individualsAnswersByGroup.map { group in
 		let uniqueAnswersForGroup = Set(group.flatMap { Array($0) })
