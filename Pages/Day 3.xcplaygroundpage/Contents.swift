@@ -3,6 +3,8 @@
 import PlaygroundSupport
 import SwiftUI
 
+let inputMap = Array(getRawPuzzleInput())
+
 final class SlopeViewModel: ObservableObject {
 	@Published var slope: Point
 	@Published var mapDisplay: [String] = []
@@ -107,7 +109,6 @@ PlaygroundPage.current.setLiveView(
 
 //MARK: Run
 
-let inputMap = Array(getRawPuzzleInput())
 let mapWidth = inputMap.firstIndex(of: "\n")!
 
 do {
