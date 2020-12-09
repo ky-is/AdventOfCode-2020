@@ -62,7 +62,6 @@ do {
 			}
 		}
 		(currentIndex, accumulator) = accumulate(instructions: tempInstructions)
-
 	}
 	print("Part 2:", accumulator)
 }

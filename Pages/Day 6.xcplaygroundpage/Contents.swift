@@ -15,7 +15,9 @@ do {
 		var groupRemaining = group
 		let firstPersonAnswers = groupRemaining.removeFirst()
 		return Array(firstPersonAnswers)
-			.filter { answer in groupRemaining.first { !$0.contains(answer) } == nil }
+			.filter { answer in
+				groupRemaining.first { !$0.contains(answer) } == nil
+			}
 			.count
 	}
 	print("Part 2:", questionsAnsweredByEveryoneInGroupCounts.reduce(0, +))

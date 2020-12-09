@@ -13,7 +13,7 @@ struct PasswordPolicy {
 	}
 
 	var arrayOfBoundsIndicies: [Int] {
-		return [countRange.lowerBound - 1, countRange.upperBound - 1]
+		[countRange.lowerBound - 1, countRange.upperBound - 1]
 	}
 }
 

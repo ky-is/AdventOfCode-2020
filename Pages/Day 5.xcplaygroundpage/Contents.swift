@@ -44,7 +44,7 @@ let input = loadPuzzleInput().map { BinarySeat(binaryString: $0) }
 
 do {
 	let highestSeatID = input.reduce(0) { previousMax, seat in
-		return max(previousMax, seat.id)
+		max(previousMax, seat.id)
 	}
 	print("Part 1:", highestSeatID)
 }
@@ -55,17 +55,16 @@ input.forEach { seat in
 }
 
 do {
-	var foundFullRow = false
+	var foundOccupiedSeat = false
 	var openSeat: BinarySeat?
 	for (row, rowOccupants) in occupiedSeats.enumerated() {
-		let emptySeatCol = rowOccupants.firstIndex(of: false)
-		if foundFullRow {
-			if let col = emptySeatCol {
-				openSeat = BinarySeat(row: row, col: col)
+		if foundOccupiedSeat {
+			if let emptySeatCol = rowOccupants.firstIndex(of: false) {
+				openSeat = BinarySeat(row: row, col: emptySeatCol)
 				break
 			}
-		} else if emptySeatCol == nil {
-			foundFullRow = true
+		} else if rowOccupants.firstIndex(of: true) != nil {
+			foundOccupiedSeat = true
 		}
 	}
 	guard let seat = openSeat else {
