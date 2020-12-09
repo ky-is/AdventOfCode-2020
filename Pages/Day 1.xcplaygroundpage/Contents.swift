@@ -2,7 +2,7 @@
 
 import PlaygroundSupport
 
-func multiplyNumbersAddingTo(goal: Int, numberCount: Int, entries: [Int]) -> Int {
+func numbersAddingTo(goal: Int, numberCount: Int, entries: [Int]) -> [Int] {
 	let firstEntry = entries.first!
 	let entryCount = entries.count
 	var indexesToGoal = Array(repeating: 0, count: numberCount)
@@ -18,7 +18,7 @@ func multiplyNumbersAddingTo(goal: Int, numberCount: Int, entries: [Int]) -> Int
 			testingEntriesToGoal[columnIndex] = firstEntry
 		}
 		if testingEntriesToGoal.reduce(0, +) == goal {
-			return testingEntriesToGoal.reduce(1, *)
+			return testingEntriesToGoal
 		}
 	}
 	fatalError("No \(numberCount) numbers add to \(goal) in \(entryCount) entries.")
@@ -33,7 +33,8 @@ PlaygroundPage.current.setLiveView(
 		if number < 2 || number > 5 {
 			return print("Number must be between 2 and 5")
 		}
-		let answer = multiplyNumbersAddingTo(goal: goal, numberCount: number, entries: loadPuzzleInput().compactMap(\.integerRepresentation))
+		let entries = loadPuzzleInput().compactMap(\.integerRepresentation)
+		let answer = numbersAddingTo(goal: goal, numberCount: number, entries: entries).reduce(1, *)
 		print(answer)
 	}
 		.padding(.vertical)
