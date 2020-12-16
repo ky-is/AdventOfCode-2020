@@ -1,7 +1,4 @@
-let surroundingSeatDirections: [(Int, Int)] = {
-	let rowSize = loadPuzzleInput()[0].count
-	return [(1, 0), (1, -1), (0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1)]
-}()
+private let surroundingSeatDirections = [(1, 0), (1, -1), (0, -1), (-1, -1), (-1, 0), (-1, 1), (0, 1), (1, 1)]
 
 public enum Seat: Character {
 	case floor = "."
@@ -9,26 +6,49 @@ public enum Seat: Character {
 	case full = "#"
 }
 
-public func fillAndVacateSeats(seats: [[Seat]]) -> [[Seat]] {
+private func seatAt(seats: [[Seat]], rowIndex: Int, colIndex: Int) -> Seat? {
+	return seats[safe: rowIndex]?[safe: colIndex]
+}
+
+private func isSeatFullInDirection(seats: [[Seat]], row: Int, col: Int, direction: (Int, Int), inLineOfSight: Bool) -> Bool {
+	if !inLineOfSight {
+		return seatAt(seats: seats, rowIndex: row + direction.1, colIndex: col + direction.0) == .full
+	}
+	let maxIterations = inLineOfSight ? .max : 2
+	for distance in 1..<maxIterations {
+		guard let surroundingSeat = seatAt(seats: seats, rowIndex: row + direction.1 * distance, colIndex: col + direction.0 * distance) else {
+			break
+		}
+		switch surroundingSeat {
+		case .full:
+			return true
+		case .empty:
+			return false
+		case .floor:
+			continue
+		}
+	}
+	return false
+}
+
+public func fillAndVacateSeats(seats: [[Seat]], inLineOfSight: Bool, minToVacate: Int) -> [[Seat]] {
 	var newSeats = seats
 	for (rowIndex, seatRow) in seats.enumerated() {
 		for (colIndex, seat) in seatRow.enumerated() {
 			switch seat  {
 			case .empty:
-				let occupiedSeat = surroundingSeatDirections.first { (x, y) in
-					let surroundingSeat = seats[safe: rowIndex + x]?[safe: colIndex + y]
-					return surroundingSeat == .full
+				let occupiedSeat = surroundingSeatDirections.first { direction in
+					isSeatFullInDirection(seats: seats, row: rowIndex, col: colIndex, direction: direction, inLineOfSight: inLineOfSight)
 				}
 				if occupiedSeat == nil {
 					newSeats[rowIndex][colIndex] = .full
 				}
 			case .full:
-				var fullSurroudingSeatCount = 0
-				for (x, y) in surroundingSeatDirections {
-					let surroundingSeat = seats[safe: rowIndex + x]?[safe: colIndex + y]
-					if surroundingSeat == .full {
-						fullSurroudingSeatCount += 1
-						if fullSurroudingSeatCount >= 4 {
+				var fullSeatsSurroundingSeatCount = 0
+				for direction in surroundingSeatDirections {
+					if isSeatFullInDirection(seats: seats, row: rowIndex, col: colIndex, direction: direction, inLineOfSight: inLineOfSight) {
+						fullSeatsSurroundingSeatCount += 1
+						if fullSeatsSurroundingSeatCount >= minToVacate {
 							newSeats[rowIndex][colIndex] = .empty
 							break
 						}

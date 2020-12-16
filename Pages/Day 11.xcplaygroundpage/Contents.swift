@@ -5,18 +5,26 @@ let seats = loadPuzzleInput()
 		Array(row).map { Seat(rawValue: $0)! }
 	}
 
-do {
+func countOccupiedSeatsAfterFollowingRules(inLineOfSight: Bool, minToVacate: Int) -> Int {
 	var previousSeats = seats, newSeats = seats
 	repeat {
 		previousSeats = newSeats
-		newSeats = fillAndVacateSeats(seats: previousSeats)
+		newSeats = fillAndVacateSeats(seats: previousSeats, inLineOfSight: inLineOfSight, minToVacate: minToVacate)
 	} while (newSeats != previousSeats)
-
-	let occupiedSeatCount = newSeats
+	return newSeats
 		.flatMap { $0 }
 		.filter { $0 == .full }
 		.count
+}
+
+do {
+	let occupiedSeatCount = countOccupiedSeatsAfterFollowingRules(inLineOfSight: false, minToVacate: 4)
 	print("Part 1:", occupiedSeatCount)
+}
+
+do {
+	let occupiedSeatCount = countOccupiedSeatsAfterFollowingRules(inLineOfSight: true, minToVacate: 5)
+	print("Part 2:", occupiedSeatCount)
 }
 
 //: [Next](@next)
