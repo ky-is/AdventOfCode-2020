@@ -9,10 +9,21 @@ public struct Point {
 		self.x = x
 		self.y = y
 	}
+}
 
-	public mutating func translate(by translation: Self) {
+public extension Point {
+	mutating func translate(by translation: Self) {
 		x += translation.x
 		y += translation.y
+	}
+
+	mutating func multiply(by multiplier: Int) {
+		x *= multiplier
+		y *= multiplier
+	}
+
+	var manhattanDistance: UInt {
+		x.magnitude + y.magnitude
 	}
 }
 
