@@ -18,9 +18,7 @@ do {
 do {
 	var trackedBusIndicesIDs = busIDs
 		.enumerated()
-		.compactMap { (offset, element) in
-			element != nil ? (offset, element!) : nil
-		}
+		.compactMap { $0 as? (Int, Int) }
 	var earliestDepartureInSeries = 0
 	var increment = trackedBusIndicesIDs.removeFirst().1
 	for (busIndex, busID) in trackedBusIndicesIDs {

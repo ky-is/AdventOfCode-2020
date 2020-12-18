@@ -35,7 +35,7 @@ public func fillAndVacateSeats(seats: [[Seat]], inLineOfSight: Bool, minToVacate
 	var newSeats = seats
 	for (rowIndex, seatRow) in seats.enumerated() {
 		for (colIndex, seat) in seatRow.enumerated() {
-			switch seat  {
+			switch seat {
 			case .empty:
 				let occupiedSeat = surroundingSeatDirections.first { direction in
 					isSeatFullInDirection(seats: seats, row: rowIndex, col: colIndex, direction: direction, inLineOfSight: inLineOfSight)

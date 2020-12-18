@@ -1,6 +1,7 @@
 //: [Previous](@previous)
 
-let input = loadPuzzleInput()
+let nauticalActions = loadPuzzleInput()
+	.map(parse)
 
 enum Action: Character {
 	case N = "N", S = "S", E = "E", W = "W"
@@ -55,8 +56,7 @@ func parse(command: String) -> (action: Action, number: Int) {
 
 do {
 	var ship = NauticalUnit(x: 0, y: 0)
-	for command in input {
-		let (action, number) = parse(command: command)
+	for (action, number) in nauticalActions {
 		switch action {
 		case .N:
 			ship.translate(y: number)
@@ -92,8 +92,7 @@ do {
 do {
 	var ship = NauticalUnit(x: 0, y: 0)
 	var waypoint = NauticalUnit(x: 10, y: 1)
-	for command in input {
-		let (action, number) = parse(command: command)
+	for (action, number) in nauticalActions {
 		switch action {
 		case .N:
 			waypoint.translate(y: number)
