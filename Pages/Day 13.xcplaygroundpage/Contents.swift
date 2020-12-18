@@ -5,15 +5,31 @@ let input = loadPuzzleInput()
 let timestamp = Int(input.first!)!
 let busIDs = input.last!
 	.split(separator: ",")
-	.compactMap(\.integerRepresentation)
+	.map(\.integerRepresentation)
 
 do {
-	let busTimestamps = busIDs
-		.map { id in id - (timestamp % id) }
+	let activeBusIDs = busIDs.compactMap { $0 }
+	let busTimestamps = activeBusIDs.map { id in id - (timestamp % id) }
 	let minMinsToWait = busTimestamps.min()!
-	let bestBusIndex = busTimestamps
-		.firstIndex(of: minMinsToWait)!
-	print("Part 1:", busIDs[bestBusIndex] * minMinsToWait)
+	let bestActiveBusIndex = busTimestamps.firstIndex(of: minMinsToWait)!
+	print("Part 1:", activeBusIDs[bestActiveBusIndex] * minMinsToWait)
+}
+
+do {
+	var trackedBusIndicesIDs = busIDs
+		.enumerated()
+		.compactMap { (offset, element) in
+			element != nil ? (offset, element!) : nil
+		}
+	var earliestDepartureInSeries = 0
+	var increment = trackedBusIndicesIDs.removeFirst().1
+	for (busIndex, busID) in trackedBusIndicesIDs {
+		while (earliestDepartureInSeries + busIndex) % busID != 0 {
+			earliestDepartureInSeries += increment
+		}
+		increment *= busID
+	}
+	print("Part 2:", earliestDepartureInSeries)
 }
 
 //: [Next](@next)
