@@ -37,7 +37,7 @@ func integer(fromBitArray bitArray: [Character]) -> Int{
 		.reversed()
 		.enumerated()
 		.reduce(0) { accumulator, indexString in
-			guard indexString.element != "0" else {
+			guard indexString.element == "1" else {
 				return accumulator
 			}
 			return accumulator + 2 ^^ indexString.offset
@@ -57,6 +57,37 @@ do {
 		}
 	}
 	print("Part 1:", addresses.values.reduce(0, +))
+}
+
+func getAddresses(from baseAddress: Int, applying wildcards: ArraySlice<Int>) -> [Int] {
+	guard let wildcard = wildcards.first else {
+		return [baseAddress]
+	}
+	let oneBitValue = 2 ^^ wildcard
+	let wildcards = wildcards.dropFirst()
+	return getAddresses(from: baseAddress + oneBitValue, applying: wildcards) + getAddresses(from: baseAddress, applying: wildcards)
+}
+
+do {
+	var addresses: [Int: Int] = [:]
+	var masks: [(offset: Int, element: Character)] = []
+	var wildcards: [Int] = []
+	for (command, value) in input {
+		if command == "mask" {
+			masks = parse(mask: value)
+			wildcards = masks
+				.filter { $0.element == "X" }
+				.map { bitCount - $0.offset - 1 }
+		} else {
+			let memoryIndex = getMemoryIndex(from: command)
+			let result = apply(masks: masks, ignoring: "0", to: memoryIndex)
+			let baseAddress = integer(fromBitArray: result)
+			let writeAddresses = getAddresses(from: baseAddress, applying: ArraySlice(wildcards))
+			let value = Int(value)!
+			writeAddresses.forEach { addresses[$0] = value }
+		}
+	}
+	print("Part 2:", addresses.values.reduce(0, +))
 }
 
 //: [Next](@next)
