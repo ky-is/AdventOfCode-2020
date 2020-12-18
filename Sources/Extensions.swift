@@ -35,6 +35,14 @@ public func ^^ (radix: Int, power: Int) -> Int {
 
 public extension StringProtocol {
 	var integerRepresentation: Int? { Int(self) }
+
+	func leftPadding(toLength: Int, withPad character: Character) -> String {
+		if count < toLength {
+			return String(repeatElement(character, count: toLength - count)) + self
+		} else {
+			return String(dropFirst(toLength))
+		}
+	}
 }
 
 public extension Collection {
