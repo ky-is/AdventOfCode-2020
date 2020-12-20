@@ -14,15 +14,13 @@ let validators = input[0]
 do {
 	let invalidFields = input.last!
 		.dropFirst()
-		.map { $0.split(separator: ",") }
-		.compactMap { ticketFields -> [Int]? in
-			let invalidFields = ticketFields
-				.compactMap(\.integerRepresentation)
+		 .map { $0.split(separator: ",").compactMap(\.integerRepresentation) }
+		.compactMap { ticketFields in
+			ticketFields
 				.filter { field in
-//					return true
 					validators.first { $0.contains(field) } == nil
 				}
-			return invalidFields.isEmpty ? nil : invalidFields
+				.nonEmpty
 		}
 		.flatMap { $0 }
 	print("Part 1:", invalidFields.reduce(0, +))
